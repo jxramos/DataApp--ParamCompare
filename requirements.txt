@@ -1,3 +1,4 @@
 bokeh
 flask
+flask_wtf
 tornado

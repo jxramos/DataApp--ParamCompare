@@ -6,9 +6,10 @@ import os
 
 # THIRD PARTY
 from flask import Flask, jsonify, render_template
-import numpy as np
+from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
+from wtforms import StringField
 
 from bokeh.application          import Application
 from bokeh.application.handlers import FunctionHandler
@@ -25,8 +26,15 @@ launch_time = datetime.now()
 app_name = os.path.basename( __file__ ).replace( '.py' , '' )
 logger = logging.getLogger(__name__)
 
-
+# Flask infrastructure
 flask_app = Flask(__name__)
+flask_app.config['SECRET_KEY'] = 'the secret to life'
+flask_app.jinja_env.trim_blocks = True
+flask_app.jinja_env.lstrip_blocks = True
+
+class CompareInputForm(FlaskForm):
+    name_x = StringField('Source X')
+    name_y = StringField('Source Y')
 
 # Populate some model maintained by the flask application
 modelDf = pandas.DataFrame()
@@ -36,6 +44,7 @@ modelDf[ 'c1_y' ] = [ x*x for x in range(nData) ]
 modelDf[ 'c2_x' ] = range(nData)
 modelDf[ 'c2_y' ] = [ 2*x for x in range(nData) ]
 
+# Bokeh infrastructure
 bokeh_app1 = Application(FunctionHandler(param_plotting.modify_doc1))
 bokeh_app2 = Application(FunctionHandler(param_plotting.modify_doc2))
 
@@ -49,15 +58,8 @@ server.start()
 
 @flask_app.route('/', methods=['GET'] )
 def index():
-    res =  "<table>"
-    res += "<tr><td><a href=\"http://localhost:8080/app1/c1\">APP1 C1</a></td></tr>"
-    res += "<tr><td><a href=\"http://localhost:8080/app1/c2\">APP1 C2</a></td></tr>"
-    res += "<tr><td><a href=\"http://localhost:8080/app2/c1\">APP2 C1</a></td></tr>"
-    res += "<tr><td><a href=\"http://localhost:8080/app2/c2\">APP2 C2</a></td></tr>"
-    res += "<tr><td><a href=\"http://localhost:8080/sendModelData/c1\">DATA C1</a></td></tr>"
-    res += "<tr><td><a href=\"http://localhost:8080/sendModelData/c2\">DATA C2</a></td></tr>"
-    res += "</table>"
-    return res
+    form = CompareInputForm()
+    return render_template( 'index.html' , form=form )
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :

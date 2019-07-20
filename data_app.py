@@ -1,6 +1,7 @@
 #region imports
 # BASE PYTHON
 from datetime import datetime
+from enum import Enum
 import logging
 import os
 
@@ -9,7 +10,7 @@ from flask import Flask, jsonify, render_template
 from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
-from wtforms import StringField
+from wtforms import FileField, SelectField, StringField
 
 from bokeh.application          import Application
 from bokeh.application.handlers import FunctionHandler
@@ -26,6 +27,11 @@ launch_time = datetime.now()
 app_name = os.path.basename( __file__ ).replace( '.py' , '' )
 logger = logging.getLogger(__name__)
 
+class ParamTypes(Enum) :
+    p1 = "Param1"
+    p2 = "Param2"
+    p3 = "Param3"
+
 # Flask infrastructure
 flask_app = Flask(__name__)
 flask_app.config['SECRET_KEY'] = 'the secret to life'
@@ -33,8 +39,11 @@ flask_app.jinja_env.trim_blocks = True
 flask_app.jinja_env.lstrip_blocks = True
 
 class CompareInputForm(FlaskForm):
+    file_x = FileField( "File X" )
+    file_y = FileField( "File Y" )
     name_x = StringField('Source X')
     name_y = StringField('Source Y')
+    params = SelectField( "Param Selection", choices=[ (e.name, e.value) for e in ParamTypes ] )
 
 # Populate some model maintained by the flask application
 modelDf = pandas.DataFrame()

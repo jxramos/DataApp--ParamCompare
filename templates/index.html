@@ -7,8 +7,28 @@
 
 <body>
   <form method="POST" enctype="multipart/form-data">
-    <div>{{form.name_x.label}} {{form.name_x}}</div>
-    <div>{{form.name_y.label}} {{form.name_y}}</div>
+    <fieldset>
+      <legend>Data Source Inputs</legend>
+      <table>
+        <tr>
+          <th colspan="2">Data X</th>
+          <th colspan="2">Data Y</th>
+        </tr>
+        <tr>
+          <td>{{form.file_x.label}}</td><td>{{form.file_x}}</td>
+          <td>{{form.file_y.label}}</td><td>{{form.file_y}}</td>
+        </tr>
+        <tr>
+          <td>{{form.name_x.label}}</td><td>{{form.name_x}}</td>
+          <td>{{form.name_y.label}}</td><td>{{form.name_y}}</td>
+        </tr>
+      </table>
+    </fieldset>
+    <br>
+    <fieldset>
+      <legend>Analysis Inputs</legend>
+      <div>{{form.params}}</div>
+    </fieldset>
   </form>
 </body>
 </html>

@@ -1,4 +1,9 @@
 #region imports
+# BASE PYTHON
+from datetime import datetime
+import logging
+import os
+
 # THIRD PARTY
 from flask import Flask, jsonify, render_template
 import numpy as np
@@ -11,8 +16,15 @@ from bokeh.embed                import server_document
 from bokeh.server.server        import Server
 
 # USER DEFINED
+import CommonLogging
 import param_plotting
 #endregion
+
+#region GLOBALS
+launch_time = datetime.now()
+app_name = os.path.basename( __file__ ).replace( '.py' , '' )
+logger = logging.getLogger(__name__)
+
 
 flask_app = Flask(__name__)
 
@@ -33,6 +45,7 @@ server = Server({'/bkapp1': bokeh_app1 ,
                  '/bkapp2' : bokeh_app2 },
                  io_loop=io_loop, allow_websocket_origin=["localhost:8080"])
 server.start()
+#endregion
 
 @flask_app.route('/', methods=['GET'] )
 def index():
@@ -67,7 +80,10 @@ if __name__ == '__main__':
     from tornado.wsgi import WSGIContainer
     from bokeh.util.browser import view
 
-    print('Opening Flask app with embedded Bokeh application on http://localhost:8080/')
+    launch_time_str = datetime.strftime( launch_time , '%Y-%m-%d_%H.%M.%S' )
+    CommonLogging.setup_logger( os.getcwd() , launch_time_str , app_name )
+
+    logger.info('Opening Flask app with embedded Bokeh application on http://localhost:8080/')
 
     # This uses Tornado to server the WSGI app that flask provides. Presumably the IOLoop
     # could also be started in a thread, and Flask could server its own app directly

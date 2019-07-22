@@ -13,21 +13,25 @@
     <div class="grid-container">
       <!--Column Headers-->
       <div>Source</div>
+      <div>Raw Data</div>
       <div>Label</div>
       <div>Count</div>
 
       <!-- X DATA -->
       <div>X</div>
+      <div><a href="{{url_for( 'data_table_page' , table_type='x')}}">data</a></div>
       <div>{{model.label_x}}</div>
       <div>{{ model._dfX | length }}</div>
 
       <!-- Y DATA -->
       <div>Y</div>
+      <div><a href="{{url_for( 'data_table_page' , table_type='y')}}">data</a></div>
       <div>{{model.label_y}}</div>
       <div>{{ model._dfY | length }}</div>
       
       <!-- Merged DATA -->
       <div>Merged</div>
+      <div><a href="{{url_for( 'data_table_page' , table_type='merged')}}">data</a></div>
       <div>--</div>
       <div>{{ model.dfMerged | length }}</div>
     </div>
@@ -50,7 +54,7 @@
       <tr>
         {% set param_result = model.param_results[param] %}
         <td>{{param}}</td>
-        <td><a href="">data</a></td>
+        <td><a href="{{url_for( 'data_table_page' , param=param , table_type='param')}}">data</a></td>
         {% for stat in model._stats %}
         <td>{% set stat_result = param_result[stat] %}
 

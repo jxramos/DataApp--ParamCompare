@@ -108,6 +108,31 @@ def summary_page() :
     return render_template( "summary_page.html" , model=model ,
                                                   stat_types=param_stats.StatTypes )
 
+@flask_app.route( '/data/<table_type>', methods=["GET"])
+def data_table_page( table_type ) :
+    """
+    Renders table presentation of data
+    """
+    logger.debug( f"table_type={table_type}" )
+    model = session_info.get_user_model(session)
+
+    # select table type's corresponding data
+    if table_type == "x" :
+        df = model._dfX
+    elif table_type== "y" :
+        df = model._dfY
+    elif table_type == "merged" :
+        df = model.dfMerged
+    elif table_type == "param" :
+        param = request.args["param"]
+        logger.debug(f"param={param}")
+        df = model.dfMerged[[ model.id_col , f"{param}_x", f"{param}_y"]]
+    else :
+        logger.debug()
+        raise ValueError( f"Unrecognized table_type={table_type}" )
+    
+    return f"<pre>{df.to_string()}</pre>" # TODO replace with template
+
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :
     script = server_document( url='http://localhost:5006/bkapp1' , arguments={'colName' : colName } )

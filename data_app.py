@@ -90,6 +90,9 @@ def index():
         model = session_info.get_user_model(session)
         model.load_model( form )
 
+        # Execute parameter comparison
+        model.compare_parameters()
+
         return redirect( url_for('summary_page' , model=model ) )
     
     return render_template( 'index.html' , form=form )

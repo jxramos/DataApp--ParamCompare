@@ -44,3 +44,20 @@ class Model() :
             self.label_x = self.file_name_x
         if not form.label_y :
             self.label_y = self.file_name_y
+
+    def compare_parameters(self) :
+        """
+        """
+        logger.info("Compare Results...")
+        self.merge_data()
+
+    def merge_data(self) :
+        """
+        """
+        logger.debug("")
+        if self.id_col not in self._dfX :
+            raise ValueError( f"id_col={self.id_col} not in X-input" )
+        if self.id_col not in self._dfY :
+            raise ValueError( f"id_col={self.id_col} not in Y-input" )
+
+        self.dfMerged = self._dfX.merge( self._dfY ,  on=self.id_col )

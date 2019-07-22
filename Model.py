@@ -31,13 +31,13 @@ class Model() :
         Loads the user's model instance with all relevant inputs from the html form
         """
         logger.debug("")
-        self.id_col = form.id_col
+        self.id_col = form.id_col.data
         self.file_name_x = form.file_x.data.filename
         self.file_name_y = form.file_x.data.filename
         self._dfX = pandas.read_csv( form.file_x.raw_data[0] )
         self._dfY = pandas.read_csv( form.file_y.raw_data[0] )
-        self._params = form.params
-        self._stats = form.stats
+        self._params = form.params.data
+        self._stats = form.stats.data
 
         # Use filenames if no labels were explicitly given
         if not form.label_x :

@@ -31,7 +31,11 @@
     <br>
     <fieldset>
       <legend><h2>Analysis Inputs</h2></legend>
-      <div>{{form.params}}</div>
+      <div>
+        {{form.params.label}}
+        <br>
+        {{form.params}}
+      </div>
     </fieldset>
     <br>
     {{form.submit}}

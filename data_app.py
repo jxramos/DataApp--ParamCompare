@@ -70,6 +70,11 @@ server.start()
 
 @flask_app.route('/', methods=['GET', "POST"] )
 def index():
+    """
+    Main page where user submits all required input to conduct a csv to csv
+    comparison analysis of common columns.
+    """
+    logger.debug("")
     form = CompareInputForm()
 
     if request.method == "POST" :
@@ -77,12 +82,15 @@ def index():
             logger.debug(form.errors)
         # form.validate_on_submit()
         return redirect( url_for('summary_page') )
-
     
     return render_template( 'index.html' , form=form )
 
 @flask_app.route( '/summary', methods=["GET"])
 def summary_page() :
+    """
+    The top level summary page where all found parameter result comparisons are presented
+    to the user.
+    """
     logger.debug("")
     return render_template( "summary_page.html" )
 

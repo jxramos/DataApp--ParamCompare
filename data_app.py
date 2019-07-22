@@ -82,7 +82,8 @@ def index():
 
 @flask_app.route( '/summary', methods=["GET"])
 def summary_page() :
-    return "Summary Page"
+    logger.debug("")
+    return render_template( "summary_page.html" )
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :

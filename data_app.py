@@ -44,8 +44,8 @@ class CompareInputForm(FlaskForm):
     id_col = StringField("ID", default="id")
     file_x = FileField( "File X" )
     file_y = FileField( "File Y" )
-    label_x = StringField('Source X')
-    label_y = StringField('Source Y')
+    label_x = StringField('Label X')
+    label_y = StringField('Label Y')
 
     params = SelectMultipleField( "Param Selection", choices=[ (e.name, e.value) for e in ParamTypes ] )
     stats  = SelectMultipleField( "Statistic Selection", choices=[ (e.name, e.value) for e in param_stats.StatTypes ] )

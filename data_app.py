@@ -6,7 +6,7 @@ import logging
 import os
 
 # THIRD PARTY
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
@@ -75,9 +75,14 @@ def index():
         if form.errors :
             logger.debug(form.errors)
         # form.validate_on_submit()
-        return "Mission accomplished!"
+        return redirect( url_for('summary_page') )
+
     
     return render_template( 'index.html' , form=form )
+
+@flask_app.route( '/summary', methods=["GET"])
+def summary_page() :
+    return "Summary Page"
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :

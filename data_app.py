@@ -106,12 +106,6 @@ def bkapp2_page( colName ) :
     script = server_document( url='http://localhost:5006/bkapp2', arguments={'colName' : colName } )
     return render_template("embed.html", script=script)
 
-@flask_app.route('/sendModelData/<colName>' , methods=['GET'] )
-def sendModelData( colName ) :
-    x = modelDf[ colName + "_x" ].tolist()
-    y = modelDf[ colName + "_y" ].tolist()
-    return jsonify( x=x , y=y )
-
 if __name__ == '__main__':
     from tornado.httpserver import HTTPServer
     from tornado.wsgi import WSGIContainer

@@ -4,6 +4,9 @@ import logging
 
 # THIRD PARTY
 import pandas
+
+# USER DEFINED
+import param_stats
 #endregion
 
 logger = logging.getLogger(__name__)
@@ -48,6 +51,28 @@ class Model() :
         """
         logger.info("Compare Results...")
         self.merge_data()
+
+        for param in self._params :
+            logger.info(f"  comparing param={param}...")
+
+            # Extract the parameter data
+            x = self.dfMerged[f"{param}_x"]
+            y = self.dfMerged[f"{param}_y"]
+
+            # initialize param result for this 
+            param_result = { 'raw_data' : { 'x' : x , 'y' : y } }
+
+            for stat in self._stats :
+                logger.debug( f"param={param}, stat={stat}")
+
+                # Linear Regression
+                if stat == param_stats.StatTypes.lin_reg.name :
+                    param_result[stat] = param_stats.linear_regression( param , x , y )
+                # t-Test
+                elif stat == param_stats.StatTypes.t_test.name :
+                    param_result[stat] = param_stats.students_t_test( param , x , y )
+
+            self.param_results[param] = param_result
 
     def merge_data(self) :
         """

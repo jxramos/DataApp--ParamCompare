@@ -39,6 +39,7 @@
       <!--Table Column Headers-->
       <tr>
         <th>Param</th>
+        <th>Raw Data</th>
         {% for stat in model._stats %}
         <th>{{ stat_types[stat].value }}</th>
         {% endfor %}  
@@ -47,7 +48,19 @@
       <!--Table Rows: parameter results-->
       {% for param in model._params %}
       <tr>
+        {% set param_result = model.param_results[param] %}
         <td>{{param}}</td>
+        <td><a href="">data</a></td>
+        {% for stat in model._stats %}
+        <td>{% set stat_result = param_result[stat] %}
+
+        {% if stat == stat_types.lin_reg.name %}
+          {% include 'lin_reg_result.html' %}
+        {% elif stat == stat_types.t_test.name %}
+          {% include 't_test_result.html' %}
+        {% endif %}
+        </td>
+        {% endfor %}
       </tr>
       {% endfor %}
     </table>

@@ -24,6 +24,13 @@ import param_stats
 import session_info
 #endregion
 
+"""
+Data comparison web application for comparing common parameters across two independent
+csv files.
+
+Remote Repo: https://github.com/jxramos/DataApp--ParamCompare
+"""
+
 #region GLOBALS
 launch_time = datetime.now()
 app_name = os.path.basename( __file__ ).replace( '.py' , '' )

@@ -28,4 +28,9 @@
     <th>std_err</th>
     <td>{{ stat_result['std_err'] }}</td>
   </tr>
+  
+  <!-- PLOT -->
+  <tr>
+    <td><a href="{{url_for( 'lin_reg_plot' , param=param )}}">plot</a></td>
+  </tr>
 </table>

@@ -20,6 +20,7 @@ from bokeh.server.server        import Server
 # USER DEFINED
 import CommonLogging
 import param_plotting
+import param_stats
 #endregion
 
 #region GLOBALS
@@ -46,6 +47,7 @@ class CompareInputForm(FlaskForm):
     name_y = StringField('Source Y')
 
     params = SelectMultipleField( "Param Selection", choices=[ (e.name, e.value) for e in ParamTypes ] )
+    stats  = SelectMultipleField( "Statistic Selection", choices=[ (e.name, e.value) for e in param_stats.StatTypes ] )
     submit = SubmitField('Submit')
 
 # Populate some model maintained by the flask application

@@ -33,8 +33,10 @@
     <fieldset>
       <legend><h2>Analysis Inputs</h2></legend>
       <div class="grid-container">
-        <div class="grid-item">{{form.params.label}}</div>
-        <div class="grid-item">{{form.params}}</div>
+        <div>{{form.params.label}}</div>
+        <div>{{form.stats.label}}</div>
+        <div>{{form.params(title="Select the parameters to conduct comparisons upon")}}</div>
+        <div>{{form.stats(title="Select the statistic metric to include in the comparison results.")}}</div>
       </div>
     </fieldset>
     <br>

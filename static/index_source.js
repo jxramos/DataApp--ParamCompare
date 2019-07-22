@@ -39,8 +39,8 @@ function _update_parameters() {
     x_lines = text_x.split("\n");
     y_lines = text_y.split("\n");
 
-    x_cols = x_lines[0].split(",");
-    y_cols = y_lines[0].split(",");
+    x_cols = x_lines[0].split(",").map(Function.prototype.call, String.prototype.trim);
+    y_cols = y_lines[0].split(",").map(Function.prototype.call, String.prototype.trim);
 
     // Update the parameter candidates to only those common columns
     id_col = document.getElementById('id_col').value

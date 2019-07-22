@@ -40,10 +40,8 @@ class Model() :
         self._stats = form.stats.data
 
         # Use filenames if no labels were explicitly given
-        if not form.label_x :
-            self.label_x = self.file_name_x
-        if not form.label_y :
-            self.label_y = self.file_name_y
+        self.label_x = form.label_x.data if form.label_x.data else self.file_name_x
+        self.label_y = form.label_y.data if form.label_y.data else self.file_name_y
 
     def compare_parameters(self) :
         """

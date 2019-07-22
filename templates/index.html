@@ -11,6 +11,8 @@
     {{ form.hidden_tag() }}
     <fieldset>
       <legend><h2>Data Source Inputs</h2></legend>
+      {{ form.id_col.label }} {{ form.id_col(title="The ID string used to match records/samples between the X and Y sources") }}
+      <br>
       <table>
         <tr>
           <th colspan="2">Data X</th>

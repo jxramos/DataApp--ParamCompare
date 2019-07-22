@@ -39,6 +39,7 @@ flask_app.jinja_env.trim_blocks = True
 flask_app.jinja_env.lstrip_blocks = True
 
 class CompareInputForm(FlaskForm):
+    id_col = StringField("ID", default="id")
     file_x = FileField( "File X" )
     file_y = FileField( "File Y" )
     name_x = StringField('Source X')

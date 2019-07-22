@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="{{url_for('static', filename='index_source.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='index_styles.css')}}">
   <title>Param Inputs</title>
 </head>
 
@@ -31,10 +32,9 @@
     <br>
     <fieldset>
       <legend><h2>Analysis Inputs</h2></legend>
-      <div>
-        {{form.params.label}}
-        <br>
-        {{form.params}}
+      <div class="grid-container">
+        <div class="grid-item">{{form.params.label}}</div>
+        <div class="grid-item">{{form.params}}</div>
       </div>
     </fieldset>
     <br>

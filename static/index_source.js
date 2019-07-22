@@ -43,7 +43,8 @@ function _update_parameters() {
     y_cols = y_lines[0].split(",");
 
     // Update the parameter candidates to only those common columns
-    common_cols = x_cols.filter(element => y_cols.indexOf(element) !== -1);
+    id_col = document.getElementById('id_col').value
+    common_cols = x_cols.filter( element => y_cols.indexOf(element) !== -1 && element != id_col );
     params.options.length = 0 
     for ( i=0; i < common_cols.length ; i++ ){
         col = common_cols[i]

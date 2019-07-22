@@ -6,7 +6,7 @@ import logging
 import os
 
 # THIRD PARTY
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
@@ -67,9 +67,16 @@ server = Server({'/bkapp1': bokeh_app1 ,
 server.start()
 #endregion
 
-@flask_app.route('/', methods=['GET'] )
+@flask_app.route('/', methods=['GET', "POST"] )
 def index():
     form = CompareInputForm()
+
+    if request.method == "POST" :
+        if form.errors :
+            logger.debug(form.errors)
+        # form.validate_on_submit()
+        return "Mission accomplished!"
+    
     return render_template( 'index.html' , form=form )
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )

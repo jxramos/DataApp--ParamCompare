@@ -105,7 +105,8 @@ def summary_page() :
     """
     logger.debug("")
     model = session_info.get_user_model(session)
-    return render_template( "summary_page.html" , model=model )
+    return render_template( "summary_page.html" , model=model ,
+                                                  stat_types=param_stats.StatTypes )
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :

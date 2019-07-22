@@ -6,7 +6,7 @@ import logging
 import os
 
 # THIRD PARTY
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
@@ -21,6 +21,7 @@ from bokeh.server.server        import Server
 import CommonLogging
 import param_plotting
 import param_stats
+import session_info
 #endregion
 
 #region GLOBALS
@@ -77,13 +78,19 @@ def index():
     comparison analysis of common columns.
     """
     logger.debug("")
+
+    session_info.init_session( session )
     form = CompareInputForm()
 
     if request.method == "POST" :
         if form.errors :
             logger.debug(form.errors)
-        # form.validate_on_submit()
-        return redirect( url_for('summary_page') )
+        
+        # Populate model with form data
+        model = session_info.get_user_model(session)
+        model.load_model( form )
+
+        return redirect( url_for('summary_page' , model=model ) )
     
     return render_template( 'index.html' , form=form )
 

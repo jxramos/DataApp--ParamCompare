@@ -140,10 +140,16 @@ def data_table_page( table_type ) :
     
     return f"<pre>{df.to_string()}</pre>" # TODO replace with template
 
-@flask_app.route( '/app1/<colName>' , methods=['GET'] )
-def bkapp1_page( colName ) :
-    script = server_document( url='http://localhost:5006/bkapp1' , arguments={'colName' : colName } )
-    return render_template("embed.html", script=script)
+@flask_app.route( '/plot/<stat_type>', methods=["GET"])
+def plot_page( stat_type ) :
+    """
+    Renders table presentation of data
+    """
+    logger.debug( f"stat_type={stat_type}" )
+    model = session_info.get_user_model(session)
+
+
+    return f"TODO stat_type={stat_type}"
 
 @flask_app.route( '/app2/<colName>' , methods=['GET'] )
 def bkapp2_page( colName ) :

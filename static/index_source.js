@@ -34,8 +34,22 @@ function _update_parameters() {
     if ( ! text_x || ! text_y ){
         return;
     }
-    console.log( text_x );
-    console.log( text_y );
+
+    // Retrieve CSV header columns
+    x_lines = text_x.split("\n");
+    y_lines = text_y.split("\n");
+
+    x_cols = x_lines[0].split(",");
+    y_cols = y_lines[0].split(",");
+
+    // Update the parameter candidates to only those common columns
+    common_cols = x_cols.filter(element => y_cols.indexOf(element) !== -1);
+    params.options.length = 0 
+    for ( i=0; i < common_cols.length ; i++ ){
+        col = common_cols[i]
+        params.options[i] = new Option(col,col)
+    }
+    console.log("updating parameters to : " + common_cols )
 }
 
 function update_parameters() {

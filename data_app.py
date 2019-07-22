@@ -10,7 +10,7 @@ from flask import Flask, jsonify, render_template
 from flask_wtf import FlaskForm
 import pandas
 from tornado.ioloop import IOLoop
-from wtforms import FileField, SelectField, StringField, SubmitField
+from wtforms import FileField, SelectMultipleField, StringField, SubmitField
 
 from bokeh.application          import Application
 from bokeh.application.handlers import FunctionHandler
@@ -44,7 +44,7 @@ class CompareInputForm(FlaskForm):
     name_x = StringField('Source X')
     name_y = StringField('Source Y')
 
-    params = SelectField( "Param Selection", choices=[ (e.name, e.value) for e in ParamTypes ] )
+    params = SelectMultipleField( "Param Selection", choices=[ (e.name, e.value) for e in ParamTypes ] )
     submit = SubmitField('Submit')
 
 # Populate some model maintained by the flask application

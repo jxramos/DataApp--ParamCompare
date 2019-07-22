@@ -93,7 +93,7 @@ def index():
         # Execute parameter comparison
         model.compare_parameters()
 
-        return redirect( url_for('summary_page' , model=model ) )
+        return redirect( url_for('summary_page' ) )
     
     return render_template( 'index.html' , form=form )
 
@@ -104,7 +104,8 @@ def summary_page() :
     to the user.
     """
     logger.debug("")
-    return render_template( "summary_page.html" )
+    model = session_info.get_user_model(session)
+    return render_template( "summary_page.html" , model=model )
 
 @flask_app.route( '/app1/<colName>' , methods=['GET'] )
 def bkapp1_page( colName ) :

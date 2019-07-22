@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class StatTypes(Enum) :
     lin_reg = "Linear Regression"
-    bias = "Bias Plot"
+    #bias = "Bias Plot"
     t_test = "t-Test"
 
 

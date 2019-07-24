@@ -28,6 +28,12 @@ def init_session(session) :
 
     user_sessions[ session[ session_id_key ] ] = Model()
 
+def get_user_model_from_key( session_id ) :
+    """
+    Retrieves the current user's model instance given their current session ID
+    """
+    return user_sessions[ session_id ]
+
 def get_user_model(session) :
     """
     Retrieves the current user's model instance given their current flask session

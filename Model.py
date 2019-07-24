@@ -36,7 +36,7 @@ class Model() :
         logger.debug("")
         self.id_col = form.id_col.data
         self.file_name_x = form.file_x.data.filename
-        self.file_name_y = form.file_x.data.filename
+        self.file_name_y = form.file_y.data.filename
         self._dfX = pandas.read_csv( form.file_x.raw_data[0] )
         self._dfY = pandas.read_csv( form.file_y.raw_data[0] )
         self._params = form.params.data

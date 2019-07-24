@@ -72,8 +72,10 @@ bokeh_app2 = Application(FunctionHandler(param_plotting.modify_doc2))
 
 io_loop = IOLoop.current()
 
-server = Server({'/bk_lin_reg_app': bokeh_lin_reg_app ,
-                 '/bkapp2' : bokeh_app2 },
+stat_type_2_plot_route = { param_stats.StatTypes.lin_reg.name : 'bk_lin_reg_app' }
+
+server = Server({ f'/{stat_type_2_plot_route[param_stats.StatTypes.lin_reg.name]}': bokeh_lin_reg_app ,
+                  '/bkapp2' : bokeh_app2 },
                  io_loop=io_loop, allow_websocket_origin=["localhost:8080"])
 server.start()
 #endregion
@@ -146,10 +148,18 @@ def plot_page( stat_type ) :
     Renders table presentation of data
     """
     logger.debug( f"stat_type={stat_type}" )
-    model = session_info.get_user_model(session)
+    param = request.args["param"]
 
+    script = server_document( url=f'http://localhost:5006/{stat_type_2_plot_route[stat_type]}',
+                              arguments={'param' : param ,
+                                         'stat_type' : stat_type ,
+                                         'session_id' : session[ session_info.session_id_key ] }
+                            )
 
-    return f"TODO stat_type={stat_type}"
+    return render_template('plot_page.html',
+                           script=script ,
+                           param=param ,
+                           stat_type=param_stats.StatTypes[stat_type] )
 
 @flask_app.route( '/app2/<colName>' , methods=['GET'] )
 def bkapp2_page( colName ) :

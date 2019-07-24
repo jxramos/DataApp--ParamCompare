@@ -159,7 +159,7 @@ def plot_page( stat_type ) :
     return render_template('plot_page.html',
                            script=script ,
                            param=param ,
-                           stat_type=param_stats.StatTypes[stat_type] )
+                           stat_type=param_stats.StatTypes[stat_type].value )
 
 @flask_app.route( '/app2/<colName>' , methods=['GET'] )
 def bkapp2_page( colName ) :

@@ -58,14 +58,6 @@ class CompareInputForm(FlaskForm):
     stats  = SelectMultipleField( "Statistic Selection", choices=[ (e.name, e.value) for e in param_stats.StatTypes ] )
     submit = SubmitField('Submit')
 
-# Populate some model maintained by the flask application
-modelDf = pandas.DataFrame()
-nData = 100
-modelDf[ 'c1_x' ] = range(nData)
-modelDf[ 'c1_y' ] = [ x*x for x in range(nData) ]
-modelDf[ 'c2_x' ] = range(nData)
-modelDf[ 'c2_y' ] = [ 2*x for x in range(nData) ]
-
 # Bokeh infrastructure
 bokeh_lin_reg_app = Application(FunctionHandler(param_plotting.lin_reg_plot))
 bokeh_app2 = Application(FunctionHandler(param_plotting.modify_doc2))
@@ -74,8 +66,8 @@ io_loop = IOLoop.current()
 
 stat_type_2_plot_route = { param_stats.StatTypes.lin_reg.name : 'bk_lin_reg_app' }
 
-server = Server({ f'/{stat_type_2_plot_route[param_stats.StatTypes.lin_reg.name]}': bokeh_lin_reg_app ,
-                  '/bkapp2' : bokeh_app2 },
+server = Server( { f'/{stat_type_2_plot_route[param_stats.StatTypes.lin_reg.name]}': bokeh_lin_reg_app , # Linear Regression App
+                 },
                  io_loop=io_loop, allow_websocket_origin=["localhost:8080"])
 server.start()
 #endregion
@@ -161,10 +153,9 @@ def plot_page( stat_type ) :
                            param=param ,
                            stat_type=param_stats.StatTypes[stat_type].value )
 
-@flask_app.route( '/app2/<colName>' , methods=['GET'] )
-def bkapp2_page( colName ) :
-    script = server_document( url='http://localhost:5006/bkapp2', arguments={'colName' : colName } )
-    return render_template("embed.html", script=script)
+@flask_app.route( '/sample/<sample_id>' , methods=['GET'] )
+def sample_page( sample_id ) :
+    return f"<h1>Sample Data Point</h1><br><pre>Sample: {sample_id}</pre>" # TODO simulate some sample expansion behavior.
 
 if __name__ == '__main__':
     from tornado.httpserver import HTTPServer

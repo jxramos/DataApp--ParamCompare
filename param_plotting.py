@@ -64,8 +64,13 @@ def lin_reg_plot(doc):
                  size = 2,
                  name='ParamData')
 
-    #plot.add_tools( HoverTool(tooltips= [("Dates","@ToolTipDates"),
-    #                                    ("Prices","@Prices")]))
+    # Configure tooltips for interactivity
+    plot.add_tools( HoverTool(tooltips=[ ("ID"     , f"@{model.id_col}" ),
+                                         ( param_x , f"@{param_x}"      ),
+                                         ( param_y , f"@{param_y}"      ),
+                                         ("(x,y)"  , "($x, $y)"         ),
+                                         ("index"  , "$index"           ),
+                                       ]))
 
     doc.add_root(column(plot))
 

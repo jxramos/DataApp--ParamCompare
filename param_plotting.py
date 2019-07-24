@@ -14,7 +14,7 @@ from bokeh.plotting import figure
 
 
 #region BOKEH SOURCE
-def modify_doc1(doc):
+def lin_reg_plot(doc):
     # get colum name from query string
     args      = doc.session_context.request.arguments
     paramName = str( args['colName'][0].decode('utf-8') )

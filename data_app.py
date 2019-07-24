@@ -67,12 +67,12 @@ modelDf[ 'c2_x' ] = range(nData)
 modelDf[ 'c2_y' ] = [ 2*x for x in range(nData) ]
 
 # Bokeh infrastructure
-bokeh_app1 = Application(FunctionHandler(param_plotting.modify_doc1))
+bokeh_lin_reg_app = Application(FunctionHandler(param_plotting.lin_reg_plot))
 bokeh_app2 = Application(FunctionHandler(param_plotting.modify_doc2))
 
 io_loop = IOLoop.current()
 
-server = Server({'/bkapp1': bokeh_app1 ,
+server = Server({'/bk_lin_reg_app': bokeh_lin_reg_app ,
                  '/bkapp2' : bokeh_app2 },
                  io_loop=io_loop, allow_websocket_origin=["localhost:8080"])
 server.start()

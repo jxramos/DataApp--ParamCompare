@@ -23,9 +23,9 @@ def lin_reg_plot(doc):
     logger.debug("")
 
     # get param and session id from query string
-    args      = doc.session_context.request.arguments
-    param = str( args['param'][0].decode('utf-8') )
-    stat_type = str( args['stat_type'][0].decode('utf-8') )
+    args       = doc.session_context.request.arguments
+    param      = str( args['param'][0].decode('utf-8') )
+    stat_type  = str( args['stat_type'][0].decode('utf-8') )
     session_id = str( args['session_id'][0].decode('utf-8') )
     logger.debug(f"param={param}, session_id={session_id}")
 

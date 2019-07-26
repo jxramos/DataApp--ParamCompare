@@ -9,7 +9,7 @@ import requests
 
 # THIRD PARTY
 from bokeh.layouts  import column
-from bokeh.models   import AjaxDataSource, ColumnDataSource, HoverTool
+from bokeh.models   import AjaxDataSource, ColumnDataSource, HoverTool, OpenURL, TapTool
 from bokeh.plotting import figure
 
 # USER DEFINED
@@ -44,7 +44,8 @@ def lin_reg_plot(doc):
     # Construct plot figure
     plot = figure( title = f'{param}' ,
                    x_axis_label=model.label_x,
-                   y_axis_label=model.label_y)
+                   y_axis_label=model.label_y,
+                   tools=['pan', 'tap', 'box_zoom', 'wheel_zoom', 'save', 'reset'])
 
     # Render identity line y=x
     x_lr = [ x_extrema[0] - x_margin , x_extrema[1] + x_margin ]
@@ -71,6 +72,11 @@ def lin_reg_plot(doc):
                                          ("(x,y)"  , "($x, $y)"         ),
                                          ("index"  , "$index"           ),
                                        ]))
+
+    # Configure taptool for data inspection
+    url = f"/sample/@{model.id_col}?x=@{param_x},y=@{param_y}"
+    taptool = plot.select(type=TapTool)
+    taptool.callback = OpenURL(url=url)
 
     doc.add_root(column(plot))
 

@@ -60,13 +60,15 @@ class CompareInputForm(FlaskForm):
 
 # Bokeh infrastructure
 bokeh_lin_reg_app = Application(FunctionHandler(param_plotting.lin_reg_plot))
-bokeh_app2 = Application(FunctionHandler(param_plotting.modify_doc2))
+bokeh_data_explore_app = Application(FunctionHandler(param_plotting.data_explore_plot))
 
 io_loop = IOLoop.current()
 
 stat_type_2_plot_route = { param_stats.StatTypes.lin_reg.name : 'bk_lin_reg_app' }
+data_explore_route = 'data_explore'
 
 server = Server( { f'/{stat_type_2_plot_route[param_stats.StatTypes.lin_reg.name]}': bokeh_lin_reg_app , # Linear Regression App
+                   f'/{data_explore_route}' : bokeh_data_explore_app ,
                  },
                  io_loop=io_loop, allow_websocket_origin=["localhost:8080"])
 server.start()
@@ -145,8 +147,7 @@ def plot_page( stat_type ) :
     script = server_document( url=f'http://localhost:5006/{stat_type_2_plot_route[stat_type]}',
                               arguments={'param' : param ,
                                          'stat_type' : stat_type ,
-                                         'session_id' : session[ session_info.session_id_key ] }
-                            )
+                                         'session_id' : session[ session_info.session_id_key ] } )
 
     return render_template('plot_page.html',
                            script=script ,
@@ -163,7 +164,11 @@ def data_pair_page() :
     Renders the interactive scatter plot page where arbitrary pairs of numerical
     columns of the merged DataFrame can be plotted side by side.
     """
-    return "data-pair" # TODO implement interactive plo
+
+    script = server_document( url=f'http://localhost:5006/{data_explore_route}',
+                              arguments={'session_id' : session[ session_info.session_id_key ] } )
+
+    return render_template( 'data_explore_page.html', script=script )
 
 if __name__ == '__main__':
     from tornado.httpserver import HTTPServer

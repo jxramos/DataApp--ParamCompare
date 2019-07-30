@@ -8,9 +8,11 @@ import logging
 import requests
 
 # THIRD PARTY
-from bokeh.layouts  import column
+from bokeh.layouts  import column, layout
 from bokeh.models   import AjaxDataSource, ColumnDataSource, HoverTool, OpenURL, TapTool
+from bokeh.models.widgets import Select
 from bokeh.plotting import figure
+import numpy
 
 # USER DEFINED
 import session_info
@@ -80,22 +82,43 @@ def lin_reg_plot(doc):
 
     doc.add_root(column(plot))
 
-def modify_doc2(doc):
-    # get column name from query string
-    args    = doc.session_context.request.arguments
-    colName = str( args['colName'][0].decode('utf-8') )
+def data_explore_plot(doc) :
+    logger.debug("")
 
-    # get model data from Flask
-    url = "http://localhost:8080/sendModelData/%s" % colName
-    #pdb.set_trace()
-    res = requests.get( url , timeout=None , verify=False )
-    print( "CODE %s" % res.status_code )
-    print( "ENCODING %s" % res.encoding )
-    print( "TEXT %s" % res.text )
-    data = res.json()
+    # get session id from query string
+    args = doc.session_context.request.arguments
+    session_id = str( args['session_id'][0].decode('utf-8') )
+    logger.debug(f"session_id={session_id}")
 
-    # plot the model data
-    plot = figure()
-    plot.circle( 'x' , 'y' , source=data , size=2 )
-    doc.add_root(column(plot))
+    # Construct ColumnDataSource
+    model = session_info.get_user_model_from_key(session_id)
+    numeric_cols = list(model.dfMerged.select_dtypes(include=[numpy.number]).columns.values)
+    x_col = numeric_cols[0]
+    y_col = numeric_cols[1]
+    df = model.dfMerged[[ model.id_col , x_col , y_col ]]
+    cds = ColumnDataSource(df)
+
+    # Construct plot figure
+    plot = figure( title = 'Data Pair Explore' ,
+                   x_axis_label=x_col,
+                   y_axis_label=y_col,
+                   tools=['pan', 'tap', 'box_zoom', 'wheel_zoom', 'save', 'reset'],
+                   match_aspect=True)
+
+    # Render the paired data scatter plot
+    plot.circle( x_col,
+                 y_col,
+                 source=cds,
+                 color='blue',
+                 size = 2,
+                 name='PairedData')
+
+    x_select = Select(title="X", value=numeric_cols[0], options=numeric_cols)
+    y_select = Select(title="Y", value=numeric_cols[1], options=numeric_cols)
+
+    l = layout( [ [ plot ],
+                  [ x_select , y_select ]
+                ], sizing_mode='stretch_both' )
+
+    doc.add_root(l)
 #endregion

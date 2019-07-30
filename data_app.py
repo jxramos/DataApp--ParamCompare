@@ -157,6 +157,14 @@ def plot_page( stat_type ) :
 def sample_page( sample_id ) :
     return f"<h1>Sample Data Point</h1><br><pre>Sample: {sample_id}</pre>" # TODO simulate some sample expansion behavior.
 
+@flask_app.route('/data-pair' , methods=['GET'])
+def data_pair_page() :
+    """
+    Renders the interactive scatter plot page where arbitrary pairs of numerical
+    columns of the merged DataFrame can be plotted side by side.
+    """
+    return "data-pair" # TODO implement interactive plo
+
 if __name__ == '__main__':
     from tornado.httpserver import HTTPServer
     from tornado.wsgi import WSGIContainer

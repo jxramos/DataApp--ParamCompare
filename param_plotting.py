@@ -9,7 +9,7 @@ import requests
 
 # THIRD PARTY
 from bokeh.layouts  import column, layout
-from bokeh.models   import AjaxDataSource, ColumnDataSource, HoverTool, OpenURL, TapTool
+from bokeh.models   import ColumnDataSource, HoverTool, OpenURL, TapTool
 from bokeh.models.widgets import Select
 from bokeh.plotting import figure
 import numpy
@@ -96,29 +96,46 @@ def data_explore_plot(doc) :
     x_col = numeric_cols[0]
     y_col = numeric_cols[1]
     df = model.dfMerged[[ model.id_col , x_col , y_col ]]
+    df.columns = [ model.id_col , 'X' , 'Y' ] # rename columns for contextual reuse
     cds = ColumnDataSource(df)
 
     # Construct plot figure
     plot = figure( title = 'Data Pair Explore' ,
                    x_axis_label=x_col,
                    y_axis_label=y_col,
-                   tools=['pan', 'tap', 'box_zoom', 'wheel_zoom', 'save', 'reset'],
+                   tools=['pan', 'box_zoom', 'wheel_zoom', 'save', 'reset'],
                    match_aspect=True)
 
     # Render the paired data scatter plot
-    plot.circle( x_col,
-                 y_col,
+    plot.circle( 'X',
+                 'Y',
                  source=cds,
                  color='blue',
                  size = 2,
                  name='PairedData')
 
-    x_select = Select(title="X", value=numeric_cols[0], options=numeric_cols)
-    y_select = Select(title="Y", value=numeric_cols[1], options=numeric_cols)
+    # Construct and configure the column selecting interaction widgets
+    x_select = Select(title="X", value=x_col, options=numeric_cols)
+    y_select = Select(title="Y", value=y_col, options=numeric_cols)
 
+    def data_update( attr , old , new ) :
+        logger.debug(f"attr={attr}, old={old}, new={new}")
+        x_col = x_select.value
+        y_col = y_select.value
+        plot.xaxis.axis_label = x_col
+        plot.yaxis.axis_label = y_col
+        cds.data = {
+            model.id_col : model.dfMerged[model.id_col],
+            'X' : model.dfMerged[x_col],
+            'Y' : model.dfMerged[y_col],
+        }
+    x_select.on_change( 'value' , data_update )
+    y_select.on_change( 'value' , data_update )
+
+    # Construct the bokeh doc layout
     l = layout( [ [ plot ],
                   [ x_select , y_select ]
-                ], sizing_mode='stretch_both' )
+                ])
 
     doc.add_root(l)
 #endregion
